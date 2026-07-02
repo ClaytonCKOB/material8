@@ -1,0 +1,54 @@
+.active-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 12px;
+  align-items: center;
+}
+
+.af-chip {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 12px;
+  background: var(--color-accent-green-light);
+  border: 0.5px solid var(--color-accent-green);
+  color: var(--color-accent-green-dark);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.af-chip:hover {
+  background: var(--color-accent-green);
+  color: white;
+}
+
+.af-chip:hover span {
+  color: white;
+}
+
+.af-chip span {
+  color: var(--color-accent-green);
+  font-size: 13px;
+  line-height: 1;
+  font-weight: 600;
+}
+
+.clear-all-btn {
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 12px;
+  background: transparent;
+  border: 0.5px solid var(--color-border-secondary);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.clear-all-btn:hover {
+  background: var(--color-background-secondary);
+  border-color: var(--color-border-primary);
+  color: var(--color-text-primary);
+}

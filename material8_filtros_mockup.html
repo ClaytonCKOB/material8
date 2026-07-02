@@ -1,0 +1,286 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-sans); }
+  .root { padding: 0; font-size: 14px; color: var(--color-text-primary); }
+  .topbar { background: var(--color-background-primary); border-bottom: 0.5px solid var(--color-border-tertiary); padding: 10px 16px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .topbar-label { font-size: 12px; color: var(--color-text-secondary); white-space: nowrap; }
+  .chip-group { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .chip { font-size: 12px; padding: 4px 10px; border-radius: 20px; border: 0.5px solid var(--color-border-secondary); background: var(--color-background-secondary); color: var(--color-text-secondary); cursor: pointer; white-space: nowrap; transition: all 0.15s; }
+  .chip.active { background: #E1F5EE; border-color: #1D9E75; color: #085041; }
+  .chip:hover:not(.active) { background: var(--color-background-tertiary); }
+  .advanced-btn { margin-left: auto; font-size: 12px; padding: 4px 12px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: transparent; color: var(--color-text-secondary); cursor: pointer; display: flex; align-items: center; gap: 5px; }
+  .advanced-btn:hover { background: var(--color-background-secondary); }
+  .advanced-panel { background: var(--color-background-secondary); border-bottom: 0.5px solid var(--color-border-tertiary); padding: 14px 16px; display: none; }
+  .advanced-panel.open { display: block; }
+  .adv-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+  .adv-group label { font-size: 11px; color: var(--color-text-tertiary); text-transform: uppercase; letter-spacing: 0.04em; display: block; margin-bottom: 6px; }
+  .adv-group select, .adv-group input[type=text] { width: 100%; font-size: 13px; padding: 6px 8px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: var(--color-background-primary); color: var(--color-text-primary); }
+  .cert-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+  .cert-chip { font-size: 11px; padding: 3px 8px; border-radius: 12px; background: var(--color-background-primary); border: 0.5px solid var(--color-border-secondary); color: var(--color-text-secondary); cursor: pointer; }
+  .cert-chip.sel { background: #E6F1FB; border-color: #378ADD; color: #0C447C; }
+  .layout { display: flex; gap: 0; min-height: 420px; }
+  .sidebar { width: 210px; min-width: 210px; border-right: 0.5px solid var(--color-border-tertiary); background: var(--color-background-primary); padding: 12px; overflow-y: auto; }
+  .sb-section { margin-bottom: 16px; }
+  .sb-title { font-size: 11px; color: var(--color-text-tertiary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px; }
+  .sb-row { display: flex; align-items: center; gap: 7px; margin-bottom: 5px; font-size: 13px; color: var(--color-text-secondary); cursor: pointer; }
+  .sb-row:hover { color: var(--color-text-primary); }
+  .sb-row input[type=checkbox] { accent-color: #1D9E75; width: 14px; height: 14px; }
+  .sb-row.active-row { color: var(--color-text-primary); font-weight: 500; }
+  .star-row { display: flex; align-items: center; gap: 4px; margin-bottom: 6px; font-size: 12px; color: var(--color-text-secondary); cursor: pointer; }
+  .stars { color: #EF9F27; font-size: 13px; }
+  .range-wrap { padding: 0 2px; }
+  .range-wrap input[type=range] { width: 100%; }
+  .range-vals { display: flex; justify-content: space-between; font-size: 11px; color: var(--color-text-tertiary); margin-top: 2px; }
+  .content { flex: 1; padding: 14px 16px; background: var(--color-background-tertiary); }
+  .results-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .results-count { font-size: 13px; color: var(--color-text-secondary); }
+  .sort-select { font-size: 12px; padding: 4px 8px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: var(--color-background-primary); color: var(--color-text-primary); }
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 12px; }
+  .prod-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 12px; cursor: pointer; transition: border-color 0.15s; }
+  .prod-card:hover { border-color: var(--color-border-primary); }
+  .prod-img { width: 100%; height: 80px; background: var(--color-background-secondary); border-radius: var(--border-radius-md); margin-bottom: 10px; display: flex; align-items: center; justify-content: center; }
+  .prod-img i { font-size: 32px; color: var(--color-text-tertiary); }
+  .prod-name { font-size: 13px; font-weight: 500; margin-bottom: 4px; }
+  .prod-brand { font-size: 11px; color: var(--color-text-secondary); margin-bottom: 8px; }
+  .badge-row { display: flex; flex-wrap: wrap; gap: 3px; margin-bottom: 6px; }
+  .badge { font-size: 10px; padding: 2px 6px; border-radius: 10px; }
+  .badge-green { background: #E1F5EE; color: #085041; }
+  .badge-blue { background: #E6F1FB; color: #0C447C; }
+  .badge-amber { background: #FAEEDA; color: #633806; }
+  .prod-score { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--color-text-secondary); }
+  .score-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .dot-green { background: #1D9E75; }
+  .dot-amber { background: #EF9F27; }
+  .dot-gray { background: #B4B2A9; }
+  .active-filters { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 12px; }
+  .af-chip { font-size: 11px; padding: 3px 8px; border-radius: 12px; background: #E1F5EE; border: 0.5px solid #1D9E75; color: #085041; display: flex; align-items: center; gap: 4px; cursor: pointer; }
+  .af-chip span { color: #1D9E75; font-size: 13px; line-height: 1; }
+  .sb-divider { border: none; border-top: 0.5px solid var(--color-border-tertiary); margin: 12px 0; }
+  .view-more { font-size: 11px; color: #1D9E75; cursor: pointer; display: inline-block; margin-top: 3px; }
+</style>
+
+<div class="root">
+  <h2 class="sr-only">Mockup de filtros do portal Material 8 — barra de filtros rápidos no topo e sidebar de refinamento lateral</h2>
+
+  <!-- TOP QUICK FILTERS -->
+  <div class="topbar">
+    <span class="topbar-label">Categoria:</span>
+    <div class="chip-group">
+      <div class="chip active">Todos</div>
+      <div class="chip">Estrutura</div>
+      <div class="chip">Revestimento</div>
+      <div class="chip">Isolamento</div>
+      <div class="chip">Hidráulica</div>
+      <div class="chip">Elétrica</div>
+      <div class="chip">Cobertura</div>
+    </div>
+    <button class="advanced-btn" onclick="toggleAdv()">
+      <i class="ti ti-adjustments-horizontal" aria-hidden="true"></i> Filtro avançado
+      <i class="ti ti-chevron-down" id="adv-icon" aria-hidden="true"></i>
+    </button>
+  </div>
+
+  <!-- ADVANCED PANEL -->
+  <div class="advanced-panel" id="adv-panel">
+    <div class="adv-grid">
+      <div class="adv-group">
+        <label>Certificações ambientais</label>
+        <div class="cert-chips">
+          <div class="cert-chip sel" onclick="toggleCert(this)">LEED</div>
+          <div class="cert-chip" onclick="toggleCert(this)">AQUA</div>
+          <div class="cert-chip" onclick="toggleCert(this)">GBC</div>
+          <div class="cert-chip sel" onclick="toggleCert(this)">ISO 14000</div>
+          <div class="cert-chip" onclick="toggleCert(this)">PBQP-H</div>
+          <div class="cert-chip" onclick="toggleCert(this)">HPD</div>
+          <div class="cert-chip" onclick="toggleCert(this)">GRI</div>
+          <div class="cert-chip" onclick="toggleCert(this)">Rótulo ABNT</div>
+        </div>
+      </div>
+      <div class="adv-group">
+        <label>Classe do resíduo (CONAMA 307)</label>
+        <select>
+          <option>Qualquer classe</option>
+          <option>Classe A — reutilizável/reciclável</option>
+          <option selected>Classe B — reciclável outras destinações</option>
+          <option>Classe C — sem tecnologia econômica</option>
+          <option>Classe D — perigoso</option>
+        </select>
+      </div>
+      <div class="adv-group">
+        <label>Destino fim de vida</label>
+        <select>
+          <option>Qualquer</option>
+          <option selected>Reciclagem</option>
+          <option>Reutilização</option>
+          <option>Compostagem</option>
+          <option>Aterro controlado</option>
+        </select>
+      </div>
+      <div class="adv-group">
+        <label>Segurança ao fogo</label>
+        <select>
+          <option>Qualquer</option>
+          <option>Classe A1 — incombustível</option>
+          <option>Classe A2</option>
+          <option>Classe B</option>
+          <option>Classe C</option>
+          <option>Classe D</option>
+          <option>Classe E — altamente inflamável</option>
+        </select>
+      </div>
+      <div class="adv-group">
+        <label>Economia circular</label>
+        <select>
+          <option>Qualquer</option>
+          <option>Circuito fechado de água</option>
+          <option>Resíduo como matéria-prima</option>
+          <option>Ambos</option>
+        </select>
+      </div>
+      <div class="adv-group">
+        <label>Normas técnicas</label>
+        <input type="text" placeholder="Ex: ABNT NBR 6118, ISO 6892…" />
+      </div>
+    </div>
+  </div>
+
+  <!-- BODY: SIDEBAR + CONTENT -->
+  <div class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+      <div class="sb-section">
+        <div class="sb-title">Desempenho</div>
+        <div class="sb-row active-row"><input type="checkbox" checked> Durabilidade identificada</div>
+        <div class="sb-row"><input type="checkbox"> Centro de pesquisa próprio</div>
+        <div class="sb-row"><input type="checkbox"> Responsável Steel / cadeia</div>
+        <hr class="sb-divider">
+        <div class="sb-title">Pontuação sustentável</div>
+        <div class="star-row"><span class="stars">★★★★★</span> 5 estrelas</div>
+        <div class="star-row"><span class="stars">★★★★</span><span style="color:var(--color-text-tertiary)">★</span> 4+</div>
+        <div class="star-row"><span class="stars">★★★</span><span style="color:var(--color-text-tertiary)">★★</span> 3+</div>
+        <hr class="sb-divider">
+        <div class="sb-title">Ambiental — água</div>
+        <div class="sb-row"><input type="checkbox"> Captação de água da chuva</div>
+        <div class="sb-row"><input type="checkbox"> Reúso no processo</div>
+        <div class="sb-row"><input type="checkbox"> Tratamento efluente in loco</div>
+        <hr class="sb-divider">
+        <div class="sb-title">Sustentabilidade</div>
+        <div class="sb-row active-row"><input type="checkbox" checked> Relatório GRI</div>
+        <div class="sb-row"><input type="checkbox"> Política publicada</div>
+        <div class="sb-row"><input type="checkbox"> Ações preservação natureza</div>
+        <span class="view-more">+ ver mais</span>
+        <hr class="sb-divider">
+        <div class="sb-title">Embalagem</div>
+        <div class="sb-row"><input type="checkbox"> Sem embalagem</div>
+        <div class="sb-row"><input type="checkbox"> Embalagem reciclável</div>
+        <div class="sb-row"><input type="checkbox"> Embalagem retornável</div>
+      </div>
+
+    </aside>
+
+    <!-- PRODUCT GRID -->
+    <main class="content">
+      <div class="active-filters">
+        <div class="af-chip">LEED <span>×</span></div>
+        <div class="af-chip">ISO 14000 <span>×</span></div>
+        <div class="af-chip">Classe B — CONAMA <span>×</span></div>
+        <div class="af-chip">Reciclagem <span>×</span></div>
+        <div class="af-chip">Relatório GRI <span>×</span></div>
+      </div>
+
+      <div class="results-header">
+        <span class="results-count">148 produtos encontrados</span>
+        <select class="sort-select">
+          <option>Ordenar: Mais relevantes</option>
+          <option>Pontuação sustentável ↓</option>
+          <option>Certificações ↓</option>
+          <option>A–Z</option>
+        </select>
+      </div>
+
+      <div class="card-grid">
+
+        <div class="prod-card">
+          <div class="prod-img"><i class="ti ti-building-arch" aria-hidden="true"></i></div>
+          <div class="prod-name">Aço CA-50</div>
+          <div class="prod-brand">Arcelor Mittal</div>
+          <div class="badge-row">
+            <span class="badge badge-green">LEED</span>
+            <span class="badge badge-blue">PBQP-H</span>
+            <span class="badge badge-green">GRI</span>
+          </div>
+          <div class="prod-score"><span class="score-dot dot-green"></span> Classe B · Reciclável</div>
+        </div>
+
+        <div class="prod-card">
+          <div class="prod-img"><i class="ti ti-wall" aria-hidden="true"></i></div>
+          <div class="prod-name">Bloco Cerâmico</div>
+          <div class="prod-brand">Cerâmica Palma</div>
+          <div class="badge-row">
+            <span class="badge badge-blue">AQUA</span>
+            <span class="badge badge-amber">Rótulo ABNT</span>
+          </div>
+          <div class="prod-score"><span class="score-dot dot-amber"></span> Classe A · Reutilizável</div>
+        </div>
+
+        <div class="prod-card">
+          <div class="prod-img"><i class="ti ti-drop" aria-hidden="true"></i></div>
+          <div class="prod-name">Manta Impermeab.</div>
+          <div class="prod-brand">Viapol</div>
+          <div class="badge-row">
+            <span class="badge badge-green">ISO 14001</span>
+          </div>
+          <div class="prod-score"><span class="score-dot dot-gray"></span> Durabilidade s/ dados</div>
+        </div>
+
+        <div class="prod-card">
+          <div class="prod-img"><i class="ti ti-bolt" aria-hidden="true"></i></div>
+          <div class="prod-name">Painel Fotovoltaico</div>
+          <div class="prod-brand">BYD Brasil</div>
+          <div class="badge-row">
+            <span class="badge badge-green">LEED</span>
+            <span class="badge badge-green">GBC Casa</span>
+            <span class="badge badge-green">GRI</span>
+          </div>
+          <div class="prod-score"><span class="score-dot dot-green"></span> Classe B · Reciclável</div>
+        </div>
+
+        <div class="prod-card">
+          <div class="prod-img"><i class="ti ti-layers-intersect" aria-hidden="true"></i></div>
+          <div class="prod-name">Lã de Rocha</div>
+          <div class="prod-brand">Rockwool</div>
+          <div class="badge-row">
+            <span class="badge badge-blue">HPD</span>
+            <span class="badge badge-blue">AQUA</span>
+          </div>
+          <div class="prod-score"><span class="score-dot dot-green"></span> Classe B · Reciclável</div>
+        </div>
+
+        <div class="prod-card">
+          <div class="prod-img"><i class="ti ti-tool" aria-hidden="true"></i></div>
+          <div class="prod-name">Argamassa Técnica</div>
+          <div class="prod-brand">Votoran</div>
+          <div class="badge-row">
+            <span class="badge badge-amber">PBQP-H</span>
+          </div>
+          <div class="prod-score"><span class="score-dot dot-gray"></span> Certificação pendente</div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<script>
+  function toggleAdv() {
+    const p = document.getElementById('adv-panel');
+    const ico = document.getElementById('adv-icon');
+    const open = p.classList.toggle('open');
+    ico.className = open ? 'ti ti-chevron-up' : 'ti ti-chevron-down';
+  }
+  function toggleCert(el) {
+    el.classList.toggle('sel');
+  }
+</script>

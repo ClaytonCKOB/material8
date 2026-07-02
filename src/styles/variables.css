@@ -1,0 +1,46 @@
+/* Design System CSS Variables for Material8 */
+
+:root {
+  /* Colors - Text */
+  --color-text-primary: #333333;
+  --color-text-secondary: #666666;
+  --color-text-tertiary: #999999;
+
+  /* Colors - Background */
+  --color-background-primary: #FFFFFF;
+  --color-background-secondary: #FAFAFA;
+  --color-background-tertiary: #F5F5F5;
+
+  /* Colors - Border */
+  --color-border-primary: #333333;
+  --color-border-secondary: #CCCCCC;
+  --color-border-tertiary: #E0E0E0;
+
+  /* Colors - Accent Green */
+  --color-accent-green: #1D9E75;
+  --color-accent-green-light: #E1F5EE;
+  --color-accent-green-dark: #085041;
+
+  /* Colors - Accent Blue */
+  --color-accent-blue: #378ADD;
+  --color-accent-blue-light: #E6F1FB;
+  --color-accent-blue-dark: #0C447C;
+
+  /* Colors - Accent Amber */
+  --color-accent-amber: #EF9F27;
+  --color-accent-amber-light: #FAEEDA;
+  --color-accent-amber-dark: #633806;
+
+  /* Colors - Utility */
+  --color-gray: #B4B2A9;
+
+  /* Border Radius */
+  --border-radius-sm: 4px;
+  --border-radius-md: 6px;
+  --border-radius-lg: 8px;
+  --border-radius-full: 9999px;
+
+  /* Typography */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+}
